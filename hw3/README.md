@@ -165,12 +165,4 @@ docker compose up -d postgres
 Get-Content migrations\V1__init_schema.sql | docker exec -i seminar3_postgres psql -U admin -d mydatabase
 Get-Content migrations\V2__add_row.sql | docker exec -i seminar3_postgres psql -U admin -d mydatabase
 ```
-
-## Примечания
-
-- Hibernate DDL auto отключен: `spring.jpa.hibernate.ddl-auto=none`.
-- Схема БД должна создаваться SQL-миграциями из папки `migrations`.
-- Если порт `15432` занят, измените порт в `docker-compose.yaml` и JDBC URL в:
-  - `src/main/resources/application.properties`;
-  - `src/main/resources/hibernate.cfg.xml`;
-  - `src/main/resources/META-INF/persistence.xml`.
+`.
