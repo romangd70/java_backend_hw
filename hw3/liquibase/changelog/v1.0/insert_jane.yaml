@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-jane-smith
+      author: dev
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 3
+              - column:
+                  name: username
+                  value: jane_smith
+              - column:
+                  name: email
+                  value: jane@example.com

@@ -1,0 +1,70 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-users-table
+      author: dev
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: username
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: VARCHAR(100)
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+
+        - createIndex:
+            tableName: users
+            indexName: idx_users_email
+            columns:
+              - column:
+                  name: email
+
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: username
+                  value: john_doe
+              - column:
+                  name: email
+                  value: john@example.com
+
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: username
+                  value: jane_smith
+              - column:
+                  name: email
+                  value: jane@example.com
+
+        - update:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: john_new@example.com
+            where: id = 1
+
+        - delete:
+            tableName: users
+            where: id = 2

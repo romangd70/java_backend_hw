@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="3.1"
+             xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence
+                                 https://jakarta.ee/xml/ns/persistence/persistence_3_1.xsd">
+
+    <persistence-unit name="my-persistence-unit" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+        <!-- Указываем сущности -->
+        <class>org.example.User</class>
+        <class>org.example.Category</class>
+        <class>org.example.Customer</class>
+        <class>org.example.Product</class>
+        <class>org.example.Order</class>
+
+        <!-- Подключение к БД -->
+        <properties>
+            <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://127.0.0.1:15432/mydatabase"/>
+            <property name="jakarta.persistence.jdbc.user" value="admin"/>
+            <property name="jakarta.persistence.jdbc.password" value="password"/>
+
+            <!-- Используем HikariCP -->
+            <property name="hibernate.connection.provider_class" value="org.hibernate.hikaricp.internal.HikariCPConnectionProvider"/>
+
+            <!-- Настройки HikariCP -->
+            <property name="hibernate.hikari.minimumIdle" value="10"/>
+            <property name="hibernate.hikari.maximumPoolSize" value="10"/>
+            <property name="hibernate.hikari.idleTimeout" value="600000"/>
+            <property name="hibernate.hikari.connectionTimeout" value="30000"/>
+            <property name="hibernate.hikari.maxLifetime" value="1800000"/>
+
+            <!-- Остальные настройки Hibernate -->
+            <property name="hibernate.connection.pool_size" value="1"/>
+            <property name="hibernate.current_session_context_class" value="thread"/>
+            <property name="hibernate.cache.provider_class" value="org.hibernate.cache.internal.NoCacheProvider"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.hbm2ddl.auto" value="none"/>
+
+            <property name="hibernate.connection.isolation" value="1"/>
+        </properties>
+    </persistence-unit>
+</persistence>

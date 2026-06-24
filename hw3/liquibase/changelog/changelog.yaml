@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - include:
+      file: v1.0/create_users_table.yaml
+  - include:
+      file: v1.0/insert_jane.yaml
