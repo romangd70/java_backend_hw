@@ -1,0 +1,21 @@
+flowchart TD
+    Start([Запуск приложения]) --> ReadFirst[Прочитать первый аргумент]
+    ReadFirst --> FirstOk{Первое число корректно?}
+    FirstOk -- Да --> SaveFirst[Сохранить первое число]
+    FirstOk -- Нет --> MinValue[Использовать Integer.MIN_VALUE]
+
+    SaveFirst --> ReadSecond[Прочитать второй аргумент]
+    MinValue --> ReadSecond
+
+    ReadSecond --> SecondArgOk{Второй аргумент корректен?}
+    SecondArgOk -- Да --> SaveSecond[Сохранить второе число]
+    SecondArgOk -- Нет --> EnvSecond[Прочитать SECOND_NUMBER]
+
+    EnvSecond --> EnvOk{SECOND_NUMBER корректен?}
+    EnvOk -- Да --> SaveSecond
+    EnvOk -- Нет --> MaxValue[Использовать Integer.MAX_VALUE]
+
+    SaveSecond --> Calculate[Выполнить Calculator.add]
+    MaxValue --> Calculate
+    Calculate --> Print[Вывести числа и результат]
+    Print --> End([Завершение])

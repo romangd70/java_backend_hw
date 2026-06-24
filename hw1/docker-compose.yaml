@@ -1,0 +1,6 @@
+services:
+  app:
+    build: .
+    environment:
+      SECOND_NUMBER: "32"
+    command: "10"
