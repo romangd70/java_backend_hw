@@ -10,6 +10,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Main {
+    static final String COUNT_USERS_SQL = "SELECT COUNT(*) FROM users";
+    static final String GET_USER_BY_ID_SQL = "SELECT id, username, email FROM get_user_by_id(?)";
+    static final String COUNT_PRODUCTS_SQL = "SELECT COUNT(*) FROM products";
+    static final String SELECT_PRODUCTS_BY_MIN_PRICE_SQL =
+        "SELECT id, name, price FROM products WHERE price >= ? ORDER BY price DESC";
+
     public static void main(String[] args) {
         try (
             HikariDataSource db1 = createDataSource(
@@ -38,6 +44,15 @@ public class Main {
         String username,
         String password
     ) {
+        return new HikariDataSource(createConfig(poolName, jdbcUrl, username, password));
+    }
+
+    static HikariConfig createConfig(
+        String poolName,
+        String jdbcUrl,
+        String username,
+        String password
+    ) {
         HikariConfig config = new HikariConfig();
         config.setPoolName(poolName);
         config.setJdbcUrl(jdbcUrl);
@@ -46,13 +61,13 @@ public class Main {
         config.setMaximumPoolSize(5);
         config.setMinimumIdle(1);
         config.setConnectionTestQuery("SELECT 1");
-        return new HikariDataSource(config);
+        return config;
     }
 
     private static void queryDb1(HikariDataSource dataSource) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             try (
-                PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM users");
+                PreparedStatement statement = connection.prepareStatement(COUNT_USERS_SQL);
                 ResultSet resultSet = statement.executeQuery()
             ) {
                 if (resultSet.next()) {
@@ -61,9 +76,7 @@ public class Main {
             }
 
             try (
-                PreparedStatement statement = connection.prepareStatement(
-                    "SELECT id, username, email FROM get_user_by_id(?)"
-                )
+                PreparedStatement statement = connection.prepareStatement(GET_USER_BY_ID_SQL)
             ) {
                 statement.setLong(1, 1L);
                 try (ResultSet resultSet = statement.executeQuery()) {
@@ -83,7 +96,7 @@ public class Main {
     private static void queryDb2(HikariDataSource dataSource) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             try (
-                PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM products");
+                PreparedStatement statement = connection.prepareStatement(COUNT_PRODUCTS_SQL);
                 ResultSet resultSet = statement.executeQuery()
             ) {
                 if (resultSet.next()) {
@@ -92,9 +105,7 @@ public class Main {
             }
 
             try (
-                PreparedStatement statement = connection.prepareStatement(
-                    "SELECT id, name, price FROM products WHERE price >= ? ORDER BY price DESC"
-                )
+                PreparedStatement statement = connection.prepareStatement(SELECT_PRODUCTS_BY_MIN_PRICE_SQL)
             ) {
                 statement.setBigDecimal(1, new BigDecimal("100.00"));
                 try (ResultSet resultSet = statement.executeQuery()) {
